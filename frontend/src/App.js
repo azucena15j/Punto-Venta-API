@@ -1,30 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
-import React from 'react';
-import Home from './pages/Home';
-import ProductoList from './components/ProductoList';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Home />
-      <ProductoList />
-    </div>
-  );
+import Home from "./components/Home";
+import Productos from "./components/Productos";
+import Carrito from "./components/Carrito";
+import Pedido from "./components/Pedido";
+import Login from "./components/Login";
+import Register from "./components/Register";
+
+export default function App() {
+    return (
+        <Router>
+            <Routes>
+                {/* Primera vista */}
+                <Route path="/" element={<Home />} />          
+
+                {/* Rutas principales */}
+                <Route path="/productos" element={<Productos />} />
+                <Route path="/carrito" element={<Carrito />} />
+                <Route path="/pedido" element={<Pedido />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} /> 
+
+                {/* Ruta comodín: cualquier ruta desconocida redirige a Home */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </Router>
+    );
 }
-
-export default App;
