@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import './App.css';
 
+// Componentes del frontend
 import Home from "./components/Home";
 import Productos from "./components/Productos";
 import Carrito from "./components/Carrito";
@@ -8,23 +10,46 @@ import Pedido from "./components/Pedido";
 import Login from "./components/Login";
 import Register from "./components/Register";
 
+// Componentes adicionales o páginas avanzadas
+import ClienteLogin from './pages/ClienteLogin';
+import ProveedorLogin from './pages/ProveedorLogin';
+import ProductosView from './pages/ProductosView';
+import CestaView from './pages/CestaView';
+import HistorialOrdenes from './pages/HistorialOrdenes';
+import ProveedorDashboard from './pages/ProveedorDashboard';
+import GestionProductos from './pages/GestionProductos';
+import GestionCategorias from './pages/GestionCategorias';
+import OrdenesProveedor from './pages/OrdenesProveedor';
+
 export default function App() {
     return (
         <Router>
-            <Routes>
-                {/* Primera vista */}
-                <Route path="/" element={<Home />} />          
+            <div className="App">
+                <Routes>
+                    {/* Public routes */}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login/cliente" element={<ClienteLogin />} />
+                    <Route path="/login/proveedor" element={<ProveedorLogin />} />
 
-                {/* Rutas principales */}
-                <Route path="/productos" element={<Productos />} />
-                <Route path="/carrito" element={<Carrito />} />
-                <Route path="/pedido" element={<Pedido />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} /> 
+                    {/* Client routes */}
+                    <Route path="/productos" element={<ProductosView />} />
+                    <Route path="/cesta" element={<CestaView />} />
+                    <Route path="/carrito" element={<Carrito />} />
+                    <Route path="/pedido" element={<Pedido />} />
+                    <Route path="/historial" element={<HistorialOrdenes />} />
 
-                {/* Ruta comodín: cualquier ruta desconocida redirige a Home */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+                    {/* Provider routes */}
+                    <Route path="/proveedor/dashboard" element={<ProveedorDashboard />} />
+                    <Route path="/proveedor/productos" element={<GestionProductos />} />
+                    <Route path="/proveedor/categorias" element={<GestionCategorias />} />
+                    <Route path="/proveedor/ordenes" element={<OrdenesProveedor />} />
+
+                    {/* Ruta comodín: cualquier ruta desconocida redirige a Home */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </div>
         </Router>
     );
 }
