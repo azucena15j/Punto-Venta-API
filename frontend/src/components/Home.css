@@ -1,0 +1,185 @@
+/* Fondo degradado y layout central */
+.home-background {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centra verticalmente todo */
+    align-items: center;
+    background: linear-gradient(135deg, #ff7e5f, #2ebf91);
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    padding: 2rem;
+    overflow: hidden; /* sin scroll */
+}
+
+/* Navbar con logo centrado */
+.home-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.logo-icon {
+    width: 70px;
+    height: 70px;
+}
+
+/* Hero */
+.hero {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem; /* reduce espacio para acercar botones */
+}
+
+.hero-text {
+    max-width: 500px;
+    text-align: left;
+    animation: fadeIn 1s ease forwards;
+}
+
+    .hero-text h1 {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .hero-text p {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+.btn-start {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    background: #ffd700;
+    color: #000;
+    font-weight: bold;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .btn-start:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+.hero-image {
+    width: 320px; /* tamaño reducido para caber todo en pantalla */
+    max-width: 100%;
+    border-radius: 20px;
+    margin-top: 1rem;
+    animation: fadeInRight 1s ease forwards;
+}
+
+/* Botones grandes estilo premium */
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem; /* sube los botones hacia el hero */
+    padding: 0;
+    animation: fadeIn 1s ease 0.5s forwards;
+}
+
+.btn-card {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+    .btn-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255,255,255,0.35);
+        box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+    }
+
+/* Animaciones suaves */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease forwards;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 1s ease forwards;
+}
+
+.animate-fade-in-up {
+    animation: fadeIn 1s ease 0.5s forwards;
+    opacity: 0;
+}
+
+/* Responsive: adapta hero y botones en pantallas pequeñas */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+
+    .hero-image {
+        width: 250px;
+        margin-top: 1rem;
+    }
+
+    .home-buttons {
+        gap: 1rem;
+    }
+}
