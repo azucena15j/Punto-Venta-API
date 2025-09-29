@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { productosAPI, categoriasAPI, tiposProductoAPI, cestaAPI } from '../services/api';
-import './ProductosView.css';
+import "../components/Productos.css";
+
+
 
 const ProductosView = () => {
     const [productos, setProductos] = useState([]);

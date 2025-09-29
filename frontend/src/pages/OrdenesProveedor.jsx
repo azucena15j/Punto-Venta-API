@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { dashboardAPI, facturasAPI } from '../services/api';
-import './OrdenesProveedor.css';
+import "../components/Pedido.css";
+
 
 const OrdenesProveedor = () => {
   const [ordenes, setOrdenes] = useState([]);

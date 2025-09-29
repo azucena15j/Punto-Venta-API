@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, Package, ClipboardList } from "lucide-react";
 import logoImg from "../img/cash-register.png"; // Logo
 import heroImg from "../img/hamburguesa.png";   // Imagen hero
-import "./Home.css";
+import "../components/Home.css";
 
 export default function Home() {
     return (

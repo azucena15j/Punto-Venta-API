@@ -1,5 +1,5 @@
 import React from "react";
-import "./Pedido.css";
+import "../components/Pedido.css";
 
 // Importar las imágenes desde la carpeta
 import pizzaImg from "../img/pizza.jpeg";

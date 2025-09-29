@@ -1,6 +1,7 @@
 import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
-import "./Carrito.css";
+// Ajuste de ruta: ahora apunta a components
+import "../components/Carrito.css";
 
 // Importar imágenes
 import pizzaImg from "../img/pizza.jpeg";

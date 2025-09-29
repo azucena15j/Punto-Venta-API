@@ -1,233 +1,92 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { categoriasAPI } from '../services/api';
-import './GestionCategorias.css';
+import React, { useState } from "react";
+// Ajuste de ruta CSS
+import "../components/Productos.css";
 
-const GestionCategorias = () => {
-  const [categorias, setCategorias] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const hasFetched = useRef(false);
-  const [showForm, setShowForm] = useState(false);
-  const [editingCategoria, setEditingCategoria] = useState(null);
-  const [formData, setFormData] = useState({
-    nombre: '',
-    descripcion: ''
-  });
-  const navigate = useNavigate();
+// Importar imágenes
+import pizzaImg from "../img/pizza.jpeg";
+import sushiImg from "../img/sushi.jpeg";
+import hamburguesaImg from "../img/hamburguesa.png";
+import cocaImg from "../img/coca.jpeg";
 
-  const [proveedor, setProveedor] = useState(null);
+const categorias = ["Combos", "Hamburguesas", "Papas", "Bebidas"];
+const productos = [
+    { id: 1, nombre: "Combo Mac", precio: 135, imagen: pizzaImg, categoria: "Combos" },
+    { id: 2, nombre: "Cajita Feliz", precio: 279, imagen: pizzaImg, categoria: "Combos" },
+    { id: 3, nombre: "Big Mac", precio: 135, imagen: hamburguesaImg, categoria: "Hamburguesas" },
+    { id: 4, nombre: "Family Box", precio: 299, imagen: pizzaImg, categoria: "Combos" },
+    { id: 5, nombre: "Coca Cola", precio: 25, imagen: cocaImg, categoria: "Bebidas" },
+    { id: 6, nombre: "Hamburguesa Sencilla", precio: 90, imagen: hamburguesaImg, categoria: "Hamburguesas" },
+    { id: 7, nombre: "Pizza Personal", precio: 120, imagen: pizzaImg, categoria: "Papas" },
+    { id: 8, nombre: "Sushi Roll", precio: 150, imagen: sushiImg, categoria: "Papas" },
+];
 
-  useEffect(() => {
-    try {
-      const proveedorData = localStorage.getItem('proveedor');
-      if (!proveedorData) {
-        navigate('/login/proveedor');
-        return;
-      }
-      
-      const parsedProveedor = JSON.parse(proveedorData);
-      if (!parsedProveedor || !parsedProveedor.proveedorId) {
-        localStorage.removeItem('proveedor');
-        navigate('/login/proveedor');
-        return;
-      }
-      
-      setProveedor(parsedProveedor);
-    } catch (error) {
-      console.error('Error parsing proveedor data:', error);
-      localStorage.removeItem('proveedor');
-      navigate('/login/proveedor');
-    }
-  }, [navigate]);
+export default function Productos() {
+    const [categoriaActiva, setCategoriaActiva] = useState("Combos");
+    const [carrito, setCarrito] = useState([]);
 
-  useEffect(() => {
-    if (!proveedor) return;
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-    loadCategorias();
-  }, [proveedor]);
+    const agregarCarrito = (producto) => {
+        setCarrito([...carrito, producto]);
+    };
 
-  const loadCategorias = async () => {
-    try {
-      setLoading(true);
-      const response = await categoriasAPI.getCategorias();
-      setCategorias(response.success ? (response.data ?? []) : []);
-    } catch (err) {
-      setError('Error al cargar las categorías');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const total = carrito.reduce((acc, p) => acc + p.precio, 0);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+    return (
+        <div className="productos-background">
+            <div className="productos-card">
+                {/* Lista de productos */}
+                <div className="productos-lista">
+                    <h2 className="productos-title">Productos</h2>
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-      if (editingCategoria) {
-        await categoriasAPI.updateCategoria(editingCategoria.categoriaId, formData);
-      } else {
-        await categoriasAPI.createCategoria(formData);
-      }
+                    {/* Categorías */}
+                    <div className="productos-categorias">
+                        {categorias.map((cat) => (
+                            <button
+                                key={cat}
+                                className={`categoria-btn ${categoriaActiva === cat ? "activo" : ""}`}
+                                onClick={() => setCategoriaActiva(cat)}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
 
-      setShowForm(false);
-      setEditingCategoria(null);
-      setFormData({
-        nombre: '',
-        descripcion: ''
-      });
-      loadCategorias();
-    } catch (err) {
-      alert('Error al guardar la categoría');
-    }
-  };
-
-  const handleEdit = (categoria) => {
-    setEditingCategoria(categoria);
-    setFormData({
-      nombre: categoria.nombre,
-      descripcion: categoria.descripcion || ''
-    });
-    setShowForm(true);
-  };
-
-  const handleDelete = async (categoriaId) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta categoría?')) return;
-
-    try {
-      await categoriasAPI.deleteCategoria(categoriaId);
-      loadCategorias();
-    } catch (err) {
-      alert('Error al eliminar la categoría');
-    }
-  };
-
-  const handleCancel = () => {
-    setShowForm(false);
-    setEditingCategoria(null);
-    setFormData({
-      nombre: '',
-      descripcion: ''
-    });
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('proveedor');
-    navigate('/');
-  };
-
-  return (
-    <div className="categorias-container">
-      <header className="categorias-header">
-        <h1>🏷️ Gestión de Categorías</h1>
-        <div className="header-actions">
-          <button 
-            onClick={() => setShowForm(true)}
-            className="btn btn-primary"
-          >
-            ➕ Nueva Categoría
-          </button>
-          <Link to="/proveedor/dashboard" className="btn btn-secondary">
-            ← Dashboard
-          </Link>
-          <button onClick={handleLogout} className="btn btn-danger">
-            🚪 Cerrar Sesión
-          </button>
-        </div>
-      </header>
-
-      {error && <div className="error-message">{error}</div>}
-
-      {showForm && (
-        <div className="form-modal">
-          <div className="form-content">
-            <h2>{editingCategoria ? 'Editar Categoría' : 'Nueva Categoría'}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Nombre de la Categoría *</label>
-                <input
-                  type="text"
-                  name="nombre"
-                  value={formData.nombre}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Nombre de la categoría"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Descripción</label>
-                <textarea
-                  name="descripcion"
-                  value={formData.descripcion}
-                  onChange={handleInputChange}
-                  placeholder="Descripción de la categoría"
-                  rows="3"
-                />
-              </div>
-
-              <div className="form-actions">
-                <button type="button" onClick={handleCancel} className="btn btn-secondary">
-                  Cancelar
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  {editingCategoria ? 'Actualizar' : 'Crear'} Categoría
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <div className="categorias-list">
-        <h2>Categorías ({categorias.length})</h2>
-        {categorias.length === 0 ? (
-          <div className="no-categorias">
-            <p>No hay categorías aún</p>
-            <button 
-              onClick={() => setShowForm(true)}
-              className="btn btn-primary"
-            >
-              Crear Primera Categoría
-            </button>
-          </div>
-        ) : (
-          <div className="categorias-grid">
-            {categorias.map(categoria => (
-              <div key={categoria.categoriaId} className="categoria-card">
-                <div className="categoria-info">
-                  <h3>{categoria.nombre}</h3>
-                  <p>{categoria.descripcion || 'Sin descripción'}</p>
+                    {/* Grid de productos */}
+                    <div className="productos-grid">
+                        {productos
+                            .filter((p) => p.categoria === categoriaActiva)
+                            .map((producto) => (
+                                <div
+                                    key={producto.id}
+                                    className="producto-item"
+                                    onClick={() => agregarCarrito(producto)}
+                                >
+                                    <img src={producto.imagen} alt={producto.nombre} className="producto-img" />
+                                    <h3 className="producto-nombre">{producto.nombre}</h3>
+                                    <p className="producto-precio">${producto.precio}</p>
+                                </div>
+                            ))}
+                    </div>
                 </div>
-                <div className="categoria-actions">
-                  <button
-                    onClick={() => handleEdit(categoria)}
-                    className="btn btn-sm btn-info"
-                  >
-                    ✏️ Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(categoria.categoriaId)}
-                    className="btn btn-sm btn-danger"
-                  >
-                    🗑️ Eliminar
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
 
-export default GestionCategorias;
+                {/* Carrito */}
+                <div className="productos-carrito">
+                    <h3 className="carrito-title">Carrito</h3>
+                    <ul className="carrito-items">
+                        {carrito.map((item, index) => (
+                            <li key={index} className="carrito-item">
+                                <span>{item.nombre}</span>
+                                <span>${item.precio}</span>
+                            </li>
+                        ))}
+                    </ul>
+                    <hr className="carrito-separator" />
+                    <p className="carrito-total">
+                        <span>Total:</span> <span>${total}</span>
+                    </p>
+                    <button className="carrito-btn pagar">Pagar</button>
+                    <button className="carrito-btn factura">Emitir Factura</button>
+                </div>
+            </div>
+        </div>
+    );
+}

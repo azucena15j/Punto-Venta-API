@@ -4,9 +4,10 @@
     "\\backend",
     "\\frontend",
     "\\frontend\\src",
+    "\\frontend\\src\\components",
     "\\frontend\\src\\img",
     "\\frontend\\src\\pages"
   ],
-  "SelectedNode": "\\frontend\\src\\pages",
+  "SelectedNode": "\\backend\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
